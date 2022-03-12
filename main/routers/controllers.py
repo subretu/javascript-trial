@@ -1,6 +1,11 @@
+from unittest import result
 from starlette.templating import Jinja2Templates
 from starlette.requests import Request
 from fastapi import APIRouter
+from main.connection import get_connection
+from main.query import (
+    get_date_summary,
+)
 
 
 router = APIRouter()
@@ -18,8 +23,19 @@ def index(request: Request):
 
 @router.get("/barchart")
 def barchart(request: Request):
-    labels = ["January", "February", "March", "April", "May", "June", "July", "August"]
-    values = [10, 9, 8, 7, 6, 4, 7, 8]
+    conn = get_connection()
+    cur = conn.cursor()
+    result_data = get_date_summary(cur)
+
+    labels = []
+    values = []
+    for item1, item2 in result_data:
+        labels.append(item1)
+        values.append(item2)
+
+    cur.close()
+    conn.close()
+
     return templates.TemplateResponse(
         "index.html",
         {
