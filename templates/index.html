@@ -17,7 +17,7 @@
       myChart.destroy();
     }
     create("time");
-  };
+    };
 
   function changeDay() {
 
@@ -27,7 +27,7 @@
     //myChart.type = "bar";
     //myChart.update();
     create("day");
-  };
+    };
 
   function create(timeUnit) {
     var ctx = document.getElementById("myChart");
@@ -38,21 +38,24 @@
       unit = [
             {% for item in labels1 %}
             "{{item}}",
-            {% endfor %}];
+            {% endfor %}
+          ];
       data = {{ values1 }}
     }
     else if(timeUnit === "day"){
       unit = [
             {% for item in labels2 %}
             "{{item}}",
-            {% endfor %}];
+            {% endfor %}
+          ];
       data = {{ values2 }};
     }
     else{
       unit = [
             {% for item in labels1 %}
             "{{item}}",
-            {% endfor %}];
+            {% endfor %}
+          ];
       data = {{ values1 }};
     }
 
