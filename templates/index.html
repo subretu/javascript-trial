@@ -2,89 +2,65 @@
 <title>グラフ</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <h1>棒グラフ</h1>
-<canvas id="myBarChart"></canvas>
+<input type="button" value="line" onclick="changeBar();"></input>
+<input type="button" value="bar" onclick="changeLine();"></input>
+<canvas id="myChart"></canvas>
 <script>
-  var ctx = document.getElementById("myBarChart");
-  var chartData = {
-      labels: [
-          {% for item in labels %}
-          "{{item}}",
-          {% endfor %}],
-      datasets: [{
-          data: {{ values }},
-      }]
-  }
-  console.log(chartData);
-  var myBarChart = new Chart(ctx, {
-      type: 'bar',
-      data:  chartData,
-      options: {
-          title: {
-              display: true,
-              text: 'sample'
-          },
-      }
-  });
-</script>
+  var myChart;
 
-<canvas id="myhorizontalBar"></canvas>
-<script>
-  var myCanvas = document.getElementById("myhorizontalBar");
-  new Chart(myCanvas, {
-    type: "bar", // 縦なら "bar" を指定
-    data: {
-      labels: ["Store 1", "Store 2", "Store 3"],
-      datasets: [
-        {
-          label: "Orange",
-          data: [3, 6, 9],
-          backgroundColor: "#F6AD3C",
-        },
-        {
-          label: "Grape",
-          data: [12, 8, 4],
-          backgroundColor: "#A64A97",
-        },
-        {
-          label: "Melon",
-          data: [2, 6, 4],
-          backgroundColor: "#AACF52",
-        },
-      ],
-    },
-    options: {
-      // 凡例
-      legend: {
-        position: "right",
-      },
-      // レスポンシブ（true だとサイズ自動調整）
-      responsive: true,
-      scales: {
-        // X軸
-        xAxes: [
-          {
-            scaleLabel: {
-              display: true,
-              fontColor: "#999",
-              labelString: "Sales Quantity",
+  // 初期表示
+  create("bar");
+
+  function changeLine() {
+
+    if (myChart) {
+      myChart.destroy();
+    }
+    create("line");
+  };
+
+  function changeBar() {
+
+    if (myChart) {
+      myChart.destroy();
+    }
+    //myChart.type = "bar";
+    //myChart.update();
+    create("bar");
+  };
+
+  function create(graphType) {
+      var ctx = document.getElementById("myChart");
+      var chartData = {
+          labels: [
+              {% for item in labels %}
+              "{{item}}",
+              {% endfor %}],
+          datasets: [
+            {
+              label: "Melon",
+              data: {{ values }},
+              backgroundColor: "#AACF52",
             },
-            stacked: true,
-            ticks: {
-              // 下記のように固定値ではなく、
-              // データに応じて算出するのがいいと思います
-              max: 24,
-              stepSize: 4,
+            {
+              label: "Yelow",
+              data: {{ values }},
+              backgroundColor: "#A64A97",
             },
-          },
-        ],
-        // Y軸
-        yAxes: [
-          {
-            stacked: true,
-          },
-        ],
-      },
-    },
-  });
+          ],
+    };
+
+    var myChart = new Chart(ctx, {
+          type: graphType,
+          data:  chartData,
+          options: {
+              title: {
+                  display: true,
+                  text: 'sample'
+              },
+          }
+      });
+  };
+
 </script>
 {% endblock %}
