@@ -1,10 +1,10 @@
-from unittest import result
 from starlette.templating import Jinja2Templates
 from starlette.requests import Request
 from fastapi import APIRouter
 from main.connection import get_connection
 from main.query import (
     get_date_summary,
+    get_time_summary,
 )
 
 
@@ -25,13 +25,20 @@ def index(request: Request):
 def barchart(request: Request):
     conn = get_connection()
     cur = conn.cursor()
-    result_data = get_date_summary(cur)
+    result_data1 = get_time_summary(cur)
+    result_data2 = get_date_summary(cur)
 
-    labels = []
-    values = []
-    for item1, item2 in result_data:
-        labels.append(item1)
-        values.append(item2)
+    labels1 = []
+    values1 = []
+    labels2 = []
+    values2 = []
+    for item1, item2 in result_data1:
+        labels1.append(item1)
+        values1.append(item2)
+
+    for item1, item2 in result_data2:
+        labels2.append(item1)
+        values2.append(item2)
 
     cur.close()
     conn.close()
@@ -40,7 +47,9 @@ def barchart(request: Request):
         "index.html",
         {
             "request": request,
-            "values": values,
-            "labels": labels,
+            "values1": values1,
+            "labels1": labels1,
+            "values2": values2,
+            "labels2": labels2,
         },
     )

@@ -15,3 +15,20 @@ def get_date_summary(cur):
     )
     rows = cur.fetchall()
     return rows
+
+
+def get_time_summary(cur):
+    cur.execute(
+        """
+        select
+            opstime
+            ,value
+        from
+            sample_date_summary
+        order by
+            opstime
+        ;
+        """
+    )
+    rows = cur.fetchall()
+    return rows

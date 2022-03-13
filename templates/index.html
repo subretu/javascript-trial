@@ -2,56 +2,73 @@
 <title>グラフ</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <h1>棒グラフ</h1>
-<input type="button" value="line" onclick="changeBar();"></input>
-<input type="button" value="bar" onclick="changeLine();"></input>
+<input type="button" value="time" onclick="changeTime();"></input>
+<input type="button" value="day" onclick="changeDay();"></input>
 <canvas id="myChart"></canvas>
 <script>
   var myChart;
 
   // 初期表示
-  create("bar");
+  create("time");
 
-  function changeLine() {
+  function changeTime() {
 
     if (myChart) {
       myChart.destroy();
     }
-    create("line");
+    create("time");
   };
 
-  function changeBar() {
+  function changeDay() {
 
     if (myChart) {
       myChart.destroy();
     }
     //myChart.type = "bar";
     //myChart.update();
-    create("bar");
+    create("day");
   };
 
-  function create(graphType) {
-      var ctx = document.getElementById("myChart");
-      var chartData = {
-          labels: [
-              {% for item in labels %}
-              "{{item}}",
-              {% endfor %}],
-          datasets: [
-            {
-              label: "Melon",
-              data: {{ values }},
-              backgroundColor: "#AACF52",
-            },
-            {
-              label: "Yelow",
-              data: {{ values }},
-              backgroundColor: "#A64A97",
-            },
-          ],
+  function create(timeUnit) {
+    var ctx = document.getElementById("myChart");
+    var unit;
+    var ddd;
+
+    if (timeUnit === "time"){
+      unit = [
+            {% for item in labels1 %}
+            "{{item}}",
+            {% endfor %}];
+      data = {{ values1 }}
+    }
+    else if(timeUnit === "day"){
+      unit = [
+            {% for item in labels2 %}
+            "{{item}}",
+            {% endfor %}];
+      data = {{ values2 }};
+    }
+    else{
+      unit = [
+            {% for item in labels1 %}
+            "{{item}}",
+            {% endfor %}];
+      data = {{ values1 }};
+    }
+
+    var chartData = {
+        labels: unit,
+        datasets: [
+          {
+            label: "Melon",
+            data: data,
+            backgroundColor: "#AACF52",
+          },
+        ],
     };
 
     var myChart = new Chart(ctx, {
-          type: graphType,
+          type: "bar",
           data:  chartData,
           options: {
               title: {
