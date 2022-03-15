@@ -80,4 +80,74 @@
   };
 
 </script>
+
+<h1>棒グラフSample2</h1>
+<canvas id="myChart2"></canvas>
+<button id="time2">時間</button>
+<button id="day2">日</button>
+
+<script>
+  var myChart2;
+
+  async function getTimeData() {
+    const res = await fetch('http://127.0.0.1:8000/time');
+      const json = await res.json();
+      return json
+  };
+
+  async function getDayData() {
+    const res = await fetch('http://127.0.0.1:8000/day');
+      const json = await res.json();
+      return json
+  };
+
+
+  async function changeTime() {
+    jsondata = await getTimeData();
+    create2(jsondata.data, jsondata.label);
+    myChart2.update();
+  };
+
+
+  async function changeDay() {
+    jsondata = await getDayData();
+    create2(jsondata.data, jsondata.label);
+    myChart2.update();
+  };
+
+  function create2(timedata, data_label) {
+    var ctx = document.getElementById("myChart2");
+    var chartData = {
+        labels: data_label,
+        datasets: [
+          {
+            data: timedata,
+            backgroundColor: "#AACF52",
+          },
+        ],
+    };
+    myChart2 = new Chart(ctx, {
+          type: "bar",
+          data:  chartData,
+          options: {
+              title: {
+                  display: true,
+                  text: 'sample'
+              },
+          }
+    });
+  };
+
+  //初期表示
+  //初期表示
+  changeTime();
+
+  document.getElementById('time2').addEventListener('click', function() {
+    changeTime();
+  });
+
+  document.getElementById('day2').addEventListener('click', function() {
+    changeDay();
+  });
+</script>
 {% endblock %}
