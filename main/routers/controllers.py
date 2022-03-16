@@ -30,7 +30,15 @@ def barchart(request: Request):
     result_data_time = get_time_summary(cur)
     result_data_day = get_date_summary(cur)
 
-    labels1, labels2, values1, values2, values3 = [], [], [], [], []
+    labels1, labels2, values1, values2, values3, values4, values5 = (
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+    )
     for item1, item2 in result_data_time:
         labels1.append(item1)
         values1.append(item2)
@@ -39,8 +47,10 @@ def barchart(request: Request):
         labels2.append(item1)
         values2.append(item2)
 
-    for item1, item2 in get_date_stack_summary:
+    for item1, item2, item3, item4 in get_date_stack_summary:
         values3.append(item2)
+        values4.append(item2)
+        values5.append(item2)
 
     cur.close()
     conn.close()
@@ -54,6 +64,8 @@ def barchart(request: Request):
             "values2": values2,
             "labels2": labels2,
             "values3": values3,
+            "values4": values4,
+            "values5": values5,
         },
     )
 
