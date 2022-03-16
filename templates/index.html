@@ -1,6 +1,7 @@
 {% extends "layout.html" %} {% block content %}
 <title>グラフ</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-stacked100@1.0.0"></script>
 <h1>棒グラフSample</h1>
 <input type="button" value="time" onclick="changeTime1();"></input>
 <input type="button" value="day" onclick="changeDay1();"></input>
@@ -78,13 +79,12 @@
           }
     });
   };
-
 </script>
 
 <h1>棒グラフSample2</h1>
+<input type="button" id="time2" value="時間">
+<input type="button" id="day2" value="日">
 <canvas id="myChart2"></canvas>
-<button id="time2">時間</button>
-<button id="day2">日</button>
 <script>
   var myChart2;
 
@@ -104,14 +104,12 @@
   async function changeTime() {
     jsondata = await getTimeData();
     create2(jsondata.data, jsondata.label);
-    myChart2.update();
   };
 
 
   async function changeDay() {
     jsondata = await getDayData();
     create2(jsondata.data, jsondata.label);
-    myChart2.update();
   };
 
   function create2(timedata, data_label) {
@@ -154,6 +152,64 @@
       myChart2.destroy();
     }
     changeDay();
+  });
+</script>
+
+<canvas id="myChart3"></canvas>
+<script>
+  Chart.register(ChartjsPluginStacked100.default);
+
+  unit = [
+            {% for item in labels2 %}
+            "{{item}}",
+            {% endfor %}
+         ];
+
+  data1 = {{ values3 }};
+  data2 = {{ values4 }};
+  data3 = {{ values5 }};
+
+  new Chart(document.getElementById("myChart3"), {
+   type: "bar",
+   data: {
+     labels: unit,
+     datasets: [
+       {data:data1 ,backgroundColor: "rgba(244, 143, 177, 0.6)" },
+       {data:data2 ,backgroundColor: "rgba(100, 23, 88, 0.6)"},
+       {data:data3 ,backgroundColor: "rgba(108, 210, 89, 0.6)"},
+     ]
+   },
+   options: {
+     plugins: {
+       stacked100: { enable: true }
+     },
+     title: {                           //タイトル設定
+                 display: true,                 //表示設定
+                 text: '順位上昇達成率'                //ラベル
+             },
+     scales: {                          //軸設定
+       xAxes: [{
+                 stacked: true
+             }],
+       yAxes: [{                      //y軸設定
+                   stacked: true,
+                     display: true,             //表示設定
+                     scaleLabel: {              //軸ラベル設定
+                        display: true,          //表示設定
+                        fontSize: 18               //フォントサイズ
+                     },
+                     ticks: {                      //最大値最小値設定
+                         min: 0,                   //最小値
+                         max: 100,                  //最大値
+                         fontSize: 18,             //フォントサイズ
+                         stepSize: 20              //軸間隔
+                     },
+                 }],
+               },
+     legend: {
+       display: true,
+     }
+   }
   });
 </script>
 {% endblock %}
