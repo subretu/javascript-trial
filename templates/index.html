@@ -2,8 +2,8 @@
 <title>グラフ</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 <h1>棒グラフSample</h1>
-<input type="button" value="time" onclick="changeTime();"></input>
-<input type="button" value="day" onclick="changeDay();"></input>
+<input type="button" value="time" onclick="changeTime1();"></input>
+<input type="button" value="day" onclick="changeDay1();"></input>
 <canvas id="myChart"></canvas>
 <script>
   var myChart;
@@ -11,7 +11,7 @@
   // 初期表示
   create("time");
 
-  function changeTime() {
+  function changeTime1() {
 
     if (myChart) {
       myChart.destroy();
@@ -19,7 +19,7 @@
     create("time");
     };
 
-  function changeDay() {
+  function changeDay1() {
 
     if (myChart) {
       myChart.destroy();
@@ -141,10 +141,18 @@
   changeTime();
 
   document.getElementById('time2').addEventListener('click', function() {
+
+    if (myChart2) {
+      myChart2.destroy();
+    }
     changeTime();
   });
 
   document.getElementById('day2').addEventListener('click', function() {
+
+    if (myChart2) {
+      myChart2.destroy();
+    }
     changeDay();
   });
 </script>
