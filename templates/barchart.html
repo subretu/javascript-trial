@@ -5,7 +5,6 @@
 <input type="button" id="time2" value="時間">
 <input type="button" id="day2" value="日">
 <canvas id="myChart2" ></canvas>
-<!-- 以下、スクリプト -->
 <script>
 
   var myChart2;
@@ -34,6 +33,40 @@
   };
 
   function create2(timedata, data_label, timefomat, timeunit, unitsize) {
+
+    var timeOption;
+    if(timeunit === 'minutes'){
+      timeOption = {
+                      parser: 'YYYY-MM-DD HH:mm:ss',
+                      unit:  'minutes',
+                      stepSize: 100,
+                      displayFormats: {
+                        'minutes': 'YYYY-MM-DD HH:mm:ss',
+                      }
+                    }
+    }
+    else if(timeunit === 'day'){
+      timeOption = {
+                      parser: 'YYYY-MM-DD',
+                      unit:  'day',
+                      stepSize: 1,
+                      displayFormats: {
+                        'day': 'YYYY-MM-DD',
+                      }
+                    }
+
+    }
+    else{
+      timeOption = {
+                      parser: 'YYYY-MM-DD HH:mm:ss',
+                      unit:  'minutes',
+                      stepSize: 100,
+                      displayFormats: {
+                        'minutes': 'YYYY-MM-DD HH:mm:ss',
+                      }
+                    }
+    }
+
     var ctx = document.getElementById("myChart2");
     var myChart = new Chart(ctx, {
         //線グラフ
@@ -46,7 +79,7 @@
             datasets: [{
                 label: 'テスト',
                 data: timedata,
-                backgroundColor: 'red' //塗りつぶしの色
+                backgroundColor: 'red'
             }]
         },
         //グラフ設定
@@ -65,14 +98,7 @@
                     },
                     //ここで軸を時間を設定する
                     type: 'time',
-                    time: {
-                        parser: timefomat,
-                        unit:  timeunit,
-                        stepSize: unitsize,
-                        displayFormats: {
-                          timeunit: timefomat,
-                        }
-                    },
+                    time: timeOption,
                     //X軸の範囲を指定
                     ticks: {
                         //min: '2022-03-10 07:00',
