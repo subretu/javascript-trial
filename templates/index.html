@@ -154,7 +154,7 @@
     changeDay();
   });
 </script>
-
+<h1>棒グラフSample3</h1>
 <canvas id="myChart3"></canvas>
 <script>
   Chart.register(ChartjsPluginStacked100.default);
@@ -183,29 +183,25 @@
      plugins: {
        stacked100: { enable: true }
      },
-     title: {                           //タイトル設定
-                 display: true,                 //表示設定
-                 text: '順位上昇達成率'                //ラベル
-             },
-     scales: {                          //軸設定
+     scales: {
        xAxes: [{
-                 stacked: true
+                stacked: true
              }],
-       yAxes: [{                      //y軸設定
-                   stacked: true,
-                     display: true,             //表示設定
-                     scaleLabel: {              //軸ラベル設定
-                        display: true,          //表示設定
-                        fontSize: 18               //フォントサイズ
-                     },
-                     ticks: {                      //最大値最小値設定
-                         min: 0,                   //最小値
-                         max: 100,                  //最大値
-                         fontSize: 18,             //フォントサイズ
-                         stepSize: 20              //軸間隔
-                     },
-                 }],
-               },
+       yAxes: [{
+                stacked: true,
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    fontSize: 18
+                  },
+                  ticks: {
+                      min: 0,
+                      max: 100,
+                      fontSize: 18,
+                      stepSize: 20
+                  },
+              }],
+      },
      legend: {
        display: true,
      }

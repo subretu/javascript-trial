@@ -57,7 +57,7 @@ def barchart(request: Request):
     conn.close()
 
     return templates.TemplateResponse(
-        "index.html",
+        "barchart.html",
         {
             "request": request,
             "values1": values1,

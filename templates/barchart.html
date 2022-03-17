@@ -1,0 +1,121 @@
+{% extends "layout.html" %} {% block content %}
+<title>グラフ</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+<h1>棒グラフSample3</h1>
+<input type="button" id="time2" value="時間">
+<input type="button" id="day2" value="日">
+<canvas id="myChart2" ></canvas>
+<!-- 以下、スクリプト -->
+<script>
+
+  var myChart2;
+
+  async function getTimeData() {
+    const res = await fetch('http://127.0.0.1:8000/time');
+      const json = await res.json();
+      return json
+  };
+
+  async function getDayData() {
+    const res = await fetch('http://127.0.0.1:8000/day');
+      const json = await res.json();
+      return json
+  };
+
+
+  async function changeTime() {
+    jsondata = await getTimeData();
+    create2(jsondata.data, jsondata.label, 'YYYY-MM-DD HH:mm:ss', 'minutes', 100);
+  };
+
+  async function changeDay() {
+    jsondata = await getDayData();
+    create2(jsondata.data, jsondata.label, 'YYYY-MM-DD', 'day', 1);
+  };
+
+  function create2(timedata, data_label, timefomat, timeunit, unitsize) {
+    var ctx = document.getElementById("myChart2");
+    var myChart = new Chart(ctx, {
+        //線グラフ
+        type: 'bar',
+        //データ
+        data: {
+            //各データの時間
+            labels: data_label,
+            //データセット
+            datasets: [{
+                label: 'テスト',
+                data: timedata,
+                backgroundColor: 'red' //塗りつぶしの色
+            }]
+        },
+        //グラフ設定
+        options: {
+            //凡例は非表示
+            legend: {
+                display: false
+            },
+            scales: {
+                //X軸
+                xAxes: [{
+                    //軸ラベル表示
+                    scaleLabel: {
+                        display: false,
+                        labelString: '時間'
+                    },
+                    //ここで軸を時間を設定する
+                    type: 'time',
+                    time: {
+                        parser: timefomat,
+                        unit:  timeunit,
+                        stepSize: unitsize,
+                        displayFormats: {
+                          timeunit: timefomat,
+                        }
+                    },
+                    //X軸の範囲を指定
+                    ticks: {
+                        //min: '2022-03-10 07:00',
+                        //max: '2022-03-10 22:00',
+                        maxRotation: 90,
+                        minRotation: 90,
+                    }
+                }],
+                //Y軸
+                yAxes: [{
+                    //軸ラベル表示
+                    scaleLabel: {
+                        display: true,
+                    },
+                    //Y軸の範囲を指定
+                    ticks: {
+                        min: 0,
+                    }
+                }]
+            }
+        }
+    });
+  };
+
+  //初期表示
+  changeTime();
+
+  document.getElementById('time2').addEventListener('click', function() {
+
+    if (myChart2) {
+      myChart2.destroy();
+    }
+    changeTime();
+  });
+
+  document.getElementById('day2').addEventListener('click', function() {
+
+    if (myChart2) {
+      myChart2.destroy();
+    }
+    changeDay();
+  });
+
+
+</script>
+{% endblock %}
